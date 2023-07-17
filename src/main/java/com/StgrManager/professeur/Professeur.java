@@ -2,26 +2,26 @@ package com.StgrManager.professeur;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.persistence.UniqueConstraint;
 
 import com.StgrManager.matiere.Matiere;
 import com.StgrManager.personne.Personne;
 import com.StgrManager.stagiaire.Stagiaire;
 
 @Entity
-@Table(name = "professeurs")
+@Table(name = "professeurs", uniqueConstraints = @UniqueConstraint(columnNames = {"nom","prenom"}))
 public class Professeur extends Personne {
 
-	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "matiere_id")
 	private Matiere matiere;
-	@ManyToMany(mappedBy = "liste_des_professeurs")
+	@ManyToMany(mappedBy = "liste_des_professeurs", cascade = CascadeType.ALL)
 	private Set<Stagiaire> liste_des_eleves;
 
 	public Professeur() {
@@ -54,6 +54,12 @@ public class Professeur extends Personne {
 
 	public void setListe_des_eleves(Set<Stagiaire> liste_des_eleves) {
 		this.liste_des_eleves = liste_des_eleves;
+	}
+	
+	public void update(String nom, String prenom, String adresse) {
+		this.nom = nom;
+		this.prenom = prenom;
+		this.adresse = adresse;
 	}
 	
 	@Override

@@ -1,10 +1,11 @@
 package com.StgrManager.personne;
 
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @MappedSuperclass
@@ -13,7 +14,8 @@ public abstract class Personne {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long numero;
-	@NotNull
+	@NotEmpty(message = "Ce champ ne peut pas être vide")
+	@Column(nullable = false)
 	@Size(max = 120, message = "Le nom doit être inférieure à 120 caractères")
 	protected String nom;
 	@Size(max = 120, message = "Le prenom doit être inférieure à 120 caractères")

@@ -2,6 +2,8 @@ package com.StgrManager.matiere;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +28,7 @@ public class MatiereController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Void> creeMatiere(@RequestBody Matiere matiere) {
+	public ResponseEntity<Void> creeMatiere(@Valid @RequestBody Matiere matiere) {
 		matiereService.creeMatiere(matiere);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}

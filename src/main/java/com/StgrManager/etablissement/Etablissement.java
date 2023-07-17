@@ -17,8 +17,10 @@ public class Etablissement {
 	@Column(unique=true)
 	private String libelle;
 	@Size(max = 255, message = "L'adresse doit être inférieure à 255 caractères")
-	protected String adresse;
+	private String adresse;
 	private String etat = "actif";
+	
+	
 	
 	public Etablissement() {
 	}
