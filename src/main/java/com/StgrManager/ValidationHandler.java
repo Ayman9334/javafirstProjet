@@ -1,4 +1,4 @@
-package com.StgrManager.autre;
+package com.StgrManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,4 +28,5 @@ public class ValidationHandler extends ResponseEntityExceptionHandler{
 		});
 		return new ResponseEntity<Object>(errors, HttpStatus.BAD_REQUEST);
 	}
+
 }

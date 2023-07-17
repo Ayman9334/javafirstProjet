@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface StagiaireRepository extends JpaRepository<Stagiaire, Long>{
 	@Query("SELECT s FROM Stagiaire s WHERE s.etat = 'actif'")
 	List<Stagiaire> findAllActif();
+	
+	List<Stagiaire> findAllByNomAndPrenom(String nom, String prenom);
 }

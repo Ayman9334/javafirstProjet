@@ -5,7 +5,6 @@ import java.time.Period;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -14,8 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -34,8 +31,6 @@ public class Stagiaire extends Personne {
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate date_de_naissance;
 	@Transient
-	@Min(value = 10, message = "L'age minimale des stagiaires est 10ans")
-    @Max(value = 23, message = "L'age maximale des stagiaires est 23ans")
 	private Integer age;
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "stagiaire_prof", 
