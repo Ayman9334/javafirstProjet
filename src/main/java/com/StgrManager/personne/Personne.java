@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 
 @MappedSuperclass
 public abstract class Personne {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long numero;

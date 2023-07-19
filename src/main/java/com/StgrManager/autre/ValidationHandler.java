@@ -1,4 +1,4 @@
-package com.StgrManager;
+package com.StgrManager.autre;
 
 import java.util.HashMap;
 import java.util.Map;
