@@ -1,4 +1,4 @@
-package com.StgrManager.etablissement;
+package com.StgrManager.Entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

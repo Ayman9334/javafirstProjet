@@ -1,8 +1,11 @@
-package com.StgrManager.etablissement;
+package com.StgrManager.Services;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+
+import com.StgrManager.Entities.Etablissement;
+import com.StgrManager.Repositories.EtablissementRepository;
 
 @Service
 public class EtablissementService {

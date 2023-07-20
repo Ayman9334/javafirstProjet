@@ -1,4 +1,4 @@
-package com.StgrManager.personne;
+package com.StgrManager.Entities;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;

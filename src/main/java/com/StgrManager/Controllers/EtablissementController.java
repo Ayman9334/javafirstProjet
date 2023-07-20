@@ -1,4 +1,4 @@
-package com.StgrManager.etablissement;
+package com.StgrManager.Controllers;
 
 import java.util.List;
 
@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.StgrManager.Entities.Etablissement;
+import com.StgrManager.Services.EtablissementService;
 
 @RestController
 @RequestMapping("/etablissement")

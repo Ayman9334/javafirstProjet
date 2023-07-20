@@ -17,8 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.StgrManager.stagiaire.Stagiaire;
-import com.StgrManager.stagiaire.StagiaireRepository;
+import com.StgrManager.Entities.Stagiaire;
+import com.StgrManager.Repositories.StagiaireRepository;
 
 @SuppressWarnings("deprecation")
 @Configuration

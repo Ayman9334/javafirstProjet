@@ -1,4 +1,4 @@
-package com.StgrManager.matiere;
+package com.StgrManager.Entities;
 
 import java.util.Set;
 
@@ -12,8 +12,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-
-import com.StgrManager.professeur.Professeur;
 
 @Entity
 @Table(name = "matieres")

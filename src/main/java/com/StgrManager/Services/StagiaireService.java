@@ -1,11 +1,13 @@
-package com.StgrManager.stagiaire;
+package com.StgrManager.Services;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.StgrManager.etablissement.Etablissement;
-import com.StgrManager.etablissement.EtablissementRepository;
+import com.StgrManager.Entities.Etablissement;
+import com.StgrManager.Entities.Stagiaire;
+import com.StgrManager.Repositories.EtablissementRepository;
+import com.StgrManager.Repositories.StagiaireRepository;
 
 @Service
 public class StagiaireService {

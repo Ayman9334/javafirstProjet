@@ -1,9 +1,11 @@
-package com.StgrManager.matiere;
+package com.StgrManager.Repositories;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
+import com.StgrManager.Entities.Matiere;
 
 public interface MatiereRepository extends JpaRepository<Matiere, Long> {
 	

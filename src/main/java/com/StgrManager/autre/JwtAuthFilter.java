@@ -11,12 +11,11 @@ import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.StgrManager.stagiaire.StagiaireRepository;
+import com.StgrManager.Repositories.StagiaireRepository;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -30,32 +29,29 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	}
 
 	@Override
-	public void doFilterInternal(@NonNull HttpServletRequest req, @NonNull HttpServletResponse res,
-			@NonNull FilterChain filterChain) throws ServletException, IOException {
+	protected void doFilterInternal(@NonNull HttpServletRequest req, @NonNull HttpServletResponse res,
+			@NonNull FilterChain filterChain)
+			throws ServletException, IOException {
 		final String authHeader = req.getHeader("Authorization");
 		final String jwtToken;
 		final String login;
 
-		if (authHeader == null || !authHeader.startsWith("Bearer")) {
-			filterChain.doFilter(req, res);
-			return;
-		}
+		if (authHeader != null && authHeader.startsWith("Bearer ")) {
+			jwtToken = authHeader.substring(7);
+			login = jwtUtil.extractUsername(jwtToken);
 
-		jwtToken = authHeader.substring(7);
-		login = jwtUtil.extractUsername(jwtToken);
-
-		if (login != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			UserDetails userDetails = stagiaireRepository.findByLogin(login);
-			if(userDetails == null) {
-				throw new UsernameNotFoundException("user not found");
-			}
-			if (jwtUtil.validateToken(jwtToken, userDetails)) {
-				UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,
-						null, null);
-				authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
-				SecurityContextHolder.getContext().setAuthentication(authToken);
+			if (login != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+				UserDetails userDetails = stagiaireRepository.findByLogin(login);
+				if (userDetails != null && jwtUtil.validateToken(jwtToken, userDetails)) {
+					UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,
+							null, userDetails.getAuthorities());
+					authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
+					SecurityContextHolder.getContext().setAuthentication(authToken);
+				}
 			}
 		}
+
+		filterChain.doFilter(req, res);
 	}
 
 }

@@ -1,9 +1,11 @@
-package com.StgrManager.stagiaire;
+package com.StgrManager.Repositories;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
+import com.StgrManager.Entities.Stagiaire;
 
 
 public interface StagiaireRepository extends JpaRepository<Stagiaire, Long>{

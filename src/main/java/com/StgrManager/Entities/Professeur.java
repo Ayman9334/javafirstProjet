@@ -1,4 +1,4 @@
-package com.StgrManager.professeur;
+package com.StgrManager.Entities;
 
 import java.util.Set;
 
@@ -9,10 +9,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-
-import com.StgrManager.matiere.Matiere;
-import com.StgrManager.personne.Personne;
-import com.StgrManager.stagiaire.Stagiaire;
 
 @Entity
 @Table(name = "professeurs", uniqueConstraints = @UniqueConstraint(columnNames = {"nom","prenom"}))

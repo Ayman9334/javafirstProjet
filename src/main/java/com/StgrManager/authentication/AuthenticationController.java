@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.StgrManager.Repositories.StagiaireRepository;
 import com.StgrManager.autre.JwtUtil;
-import com.StgrManager.stagiaire.StagiaireRepository;
 
 @RestController
 @RequestMapping("/auth")

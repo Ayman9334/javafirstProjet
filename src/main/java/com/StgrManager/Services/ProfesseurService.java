@@ -1,11 +1,13 @@
-package com.StgrManager.professeur;
+package com.StgrManager.Services;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.StgrManager.matiere.Matiere;
-import com.StgrManager.matiere.MatiereRepository;
+import com.StgrManager.Entities.Matiere;
+import com.StgrManager.Entities.Professeur;
+import com.StgrManager.Repositories.MatiereRepository;
+import com.StgrManager.Repositories.ProfesseurRepository;
 
 @Service
 public class ProfesseurService {

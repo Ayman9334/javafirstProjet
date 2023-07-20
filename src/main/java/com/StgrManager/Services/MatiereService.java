@@ -1,8 +1,11 @@
-package com.StgrManager.matiere;
+package com.StgrManager.Services;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+
+import com.StgrManager.Entities.Matiere;
+import com.StgrManager.Repositories.MatiereRepository;
 
 @Service
 public class MatiereService {

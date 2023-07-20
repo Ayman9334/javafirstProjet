@@ -1,4 +1,4 @@
-package com.StgrManager.stagiaire;
+package com.StgrManager.Entities;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -23,9 +23,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.StgrManager.etablissement.Etablissement;
-import com.StgrManager.personne.Personne;
-import com.StgrManager.professeur.Professeur;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
