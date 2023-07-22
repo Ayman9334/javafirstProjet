@@ -5,20 +5,18 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "matieres")
-public class Matiere {
+public class Matiere extends BaseEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@NotNull(message = "Ce champ ne peut pas être vide")
+	@Column(nullable = false)
 	private Long numero;
 	@NotEmpty(message = "Ce champ ne peut pas être vide")
 	@Column(nullable = false)
