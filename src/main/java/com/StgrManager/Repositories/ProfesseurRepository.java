@@ -10,4 +10,7 @@ import com.StgrManager.Entities.Professeur;
 public interface ProfesseurRepository extends JpaRepository<Professeur, Long>{
 	@Query("SELECT p FROM Professeur p WHERE p.etat = 'actif'")
 	List<Professeur> findAllActif();
+	
+	@Query("SELECT MAX(p.numero) FROM Professeur p")
+	Long getGrandNumero();
 }

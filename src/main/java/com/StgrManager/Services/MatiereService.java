@@ -2,6 +2,8 @@ package com.StgrManager.Services;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.StgrManager.Entities.Matiere;
@@ -20,8 +22,37 @@ public class MatiereService {
 		return matiereRepository.findAllActif();
 	}
 
-	public void creeMatiere(Matiere matiere) {
+	public ResponseEntity<Void> creeMatiere(Matiere matiere) {
+		Long GrandNumero = matiereRepository.getGrandNumero();
+		if (GrandNumero == null) {
+			GrandNumero = 1L;
+		}
+		matiere.setNumero(GrandNumero + 1);
 		matiereRepository.save(matiere);
+		return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+
+	public ResponseEntity<Void> updateMatiere(Matiere matiere, Long matiereId) {
+		Matiere matiereAncient = matiereRepository.findById(matiereId)
+				.orElseThrow(() -> new IllegalStateException("Il n'y a aucun matière avec ce ID"));
+		matiereAncient.setLibelle(matiere.getLibelle());
+		matiereRepository.save(matiereAncient);
+		return ResponseEntity.ok().build();
+	}
+
+	public ResponseEntity<Void> desactiverMatiere(Long matiereId) {
+		Matiere matiere = matiereRepository.findById(matiereId)
+				.orElseThrow(() -> new IllegalStateException("il n'y a aucun article associé à cet identifiant"));
+		matiere.setEtat("desactive");
+		matiereRepository.save(matiere);
+		return ResponseEntity.ok().build();
+	}
+
+	public ResponseEntity<Void> suprimerMatiere(Long matiereId) {
+		matiereRepository.findById(matiereId)
+				.orElseThrow(() -> new IllegalStateException("il n'y a aucun article associé à cet identifiant"));
+		matiereRepository.deleteById(matiereId);
+		return ResponseEntity.ok().build();
 	}
 
 }
