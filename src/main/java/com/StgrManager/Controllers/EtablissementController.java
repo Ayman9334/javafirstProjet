@@ -1,11 +1,16 @@
 package com.StgrManager.Controllers;
 
 import java.util.List;
+import java.util.Map;
 
-import org.springframework.http.HttpStatus;
+import javax.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,15 +27,29 @@ public class EtablissementController {
 	public EtablissementController(EtablissementService etablissementService) {
 		this.etablissementService = etablissementService;
 	}
-	
+
 	@GetMapping
-	public List<Etablissement> getEtablissement(){
+	public List<Etablissement> getEtablissement() {
 		return etablissementService.getEtablissement();
 	}
-	
+
 	@PostMapping
-	public ResponseEntity<Void> creeEtablissement(@RequestBody Etablissement etablissement){
-		etablissementService.creeEtablissement(etablissement);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+	public ResponseEntity<Map<String,String>> creerEtablissement(@Valid @RequestBody Etablissement etablissement) {
+		return etablissementService.creeEtablissement(etablissement);
+	}
+
+	@PutMapping(path = "/{etablissementId}")
+	public ResponseEntity<Map<String, String>> updateEtablissement(@Valid @RequestBody Etablissement etablissement, @PathVariable Long etablissementId) {
+		return etablissementService.updateEtablissement(etablissement, etablissementId);
+	}
+	
+	@PutMapping(path = "/desactiver/{etablissementId}") 
+	public ResponseEntity<Void> desactiverEtablissement(@PathVariable Long etablissementId){
+		return etablissementService.desactiverEtablissement(etablissementId);
+	}
+	
+	@DeleteMapping(path = "/{etablissementId}")
+	public ResponseEntity<Void> suprimerEtablissement(@PathVariable Long etablissementId) {
+		return etablissementService.suprimerEtablissement(etablissementId);
 	}
 }

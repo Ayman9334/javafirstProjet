@@ -2,29 +2,24 @@ package com.StgrManager.Entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "etablissements")
-public class Etablissement {
-	
-	@Id
-	@NotNull
-	@Size(max = 200, message = "L'etblissement doit être inférieure à 200 caractères")
-	@Column(unique=true)
+public class Etablissement extends BaseEntity {
+
+	@NotEmpty(message = "Le libelle ne peut pas être vide")
+	@Size(max = 200, message = "Le libelle doit être inférieure à 200 caractères")
+	@Column(unique = true, nullable = false)
 	private String libelle;
 	@Size(max = 255, message = "L'adresse doit être inférieure à 255 caractères")
 	private String adresse;
-	private String etat = "actif";
-	
-	
-	
+
 	public Etablissement() {
 	}
-
+	
 	public Etablissement(String libelle, String adresse) {
 		this.libelle = libelle;
 		this.adresse = adresse;
@@ -46,17 +41,8 @@ public class Etablissement {
 		this.adresse = adresse;
 	}
 
-	public String getEtat() {
-		return etat;
+	public void update(Etablissement etablissement) {
+		this.libelle = etablissement.getLibelle();
+		this.adresse = etablissement.getAdresse();
 	}
-
-	public void setEtat(String etat) {
-		this.etat = etat;
-	}
-
-	@Override
-	public String toString() {
-		return "Etablissement [libelle=" + libelle + ", adresse=" + adresse + ", etat=" + etat + "]";
-	}
-
 }

@@ -24,16 +24,10 @@ public class Professeur extends Personne {
 	}
 
 	public Professeur(Long numero, String nom, String prenom, String adresse) {
-		this.numero = numero;
-		this.nom = nom;
-		this.prenom = prenom;
-		this.adresse = adresse;
-	}
-
-	public Professeur(String nom, String prenom, String adresse) {
-		this.nom = nom;
-		this.prenom = prenom;
-		this.adresse = adresse;
+		this.setNumero(numero);
+		this.setNom(nom);
+		this.setPrenom(prenom);
+		this.setAdresse(adresse);
 	}
 	
 	public Matiere getMatiere() {
@@ -53,14 +47,9 @@ public class Professeur extends Personne {
 	}
 	
 	public void update(String nom, String prenom, String adresse) {
-		this.nom = nom;
-		this.prenom = prenom;
-		this.adresse = adresse;
-	}
-	
-	@Override
-	public String toString() {
-		return "Professeur [numero=" + numero + ", nom=" + nom + ", prenom=" + prenom + ", adresse=" + adresse + "]";
+		this.setNom(nom);
+		this.setPrenom(prenom);
+		this.setAdresse(adresse);
 	}
 
 }

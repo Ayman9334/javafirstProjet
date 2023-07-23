@@ -31,7 +31,7 @@ public class StagiaireController {
 	}
 	
 	@PostMapping("/{etablissementId}")
-	public ResponseEntity<Void> creeStagiaire(@Valid @RequestBody Stagiaire stagiaire ,@PathVariable String etablissementId){
+	public ResponseEntity<Void> creeStagiaire(@Valid @RequestBody Stagiaire stagiaire ,@PathVariable Long etablissementId){
 		stagiaireService.creeStagiaire(stagiaire,etablissementId);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}

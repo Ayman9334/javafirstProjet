@@ -24,7 +24,7 @@ public class StagiaireService {
 		return stagiaireRepository.findAllActif();
 	}
 
-	public void creeStagiaire(Stagiaire stagiaire, String etablissementId) {
+	public void creeStagiaire(Stagiaire stagiaire, Long etablissementId) {
 		Integer age = stagiaire.getAge();
 
 		if (age == null || age < 10 || age > 23) {

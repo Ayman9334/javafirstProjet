@@ -31,12 +31,15 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class Stagiaire extends Personne implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
+
 	@NotNull(message = "Ce champ ne peut pas être vide")
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate date_de_naissance;
+
 	@Transient
 	private Integer age;
+
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "stagiaire_prof", joinColumns = @JoinColumn(name = "stagiaire_id"), inverseJoinColumns = @JoinColumn(name = "professeur_id"))
 	private Set<Professeur> liste_des_professeurs;
@@ -52,28 +55,16 @@ public class Stagiaire extends Personne implements UserDetails {
 	@NotEmpty(message = "Ce champ ne peut pas être vide")
 	@Column(nullable = false)
 	private String mot_de_passe;
-	
-	// need login
 
 	public Stagiaire() {
 	}
 
 	public Stagiaire(Long numero, String nom, String prenom, String adresse,
 			LocalDate date_de_naissance, String login, String mot_de_passe) {
-		this.numero = numero;
-		this.nom = nom;
-		this.prenom = prenom;
-		this.adresse = adresse;
-		this.date_de_naissance = date_de_naissance;
-		this.login = login;
-		this.mot_de_passe = mot_de_passe;
-	}
-
-	public Stagiaire(String nom, String prenom, String adresse,
-			LocalDate date_de_naissance, String login, String mot_de_passe) {
-		this.nom = nom;
-		this.prenom = prenom;
-		this.adresse = adresse;
+		this.setNumero(numero);
+		this.setNom(nom);
+		this.setPrenom(prenom);
+		this.setAdresse(adresse);
 		this.date_de_naissance = date_de_naissance;
 		this.login = login;
 		this.mot_de_passe = mot_de_passe;
@@ -123,16 +114,16 @@ public class Stagiaire extends Personne implements UserDetails {
 		this.mot_de_passe = mot_de_passe;
 	}
 
-	//userDetails methods
-	
+	// userDetails methods
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return null;
 	}
-	
+
 	@Override
 	public String getPassword() {
-		return  mot_de_passe;
+		return mot_de_passe;
 	}
 
 	@Override
@@ -158,15 +149,6 @@ public class Stagiaire extends Personne implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
-	}
-	
-	//------------------------
-	
-	@Override
-	public String toString() {
-		return "Stagiaire [date_de_naissance=" + date_de_naissance + ", age=" + age
-				+ ", liste_des_professeurs=" + liste_des_professeurs + ", etablissement="
-				+ etablissement + ", login=" + login + ", mot_de_passe=" + mot_de_passe + "]";
 	}
 
 }

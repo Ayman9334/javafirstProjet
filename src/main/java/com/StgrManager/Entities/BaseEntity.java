@@ -23,11 +23,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 public abstract class BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 
-	@Column(nullable = false, columnDefinition = "VARCHAR(10) CHECK (status IN ('actif', 'desactive'))")
-	private String status = "actif";
-	
+	@Column(nullable = false)
+	private String etat = "actif";
+
 	@ManyToOne
 	@JoinColumn(name = "createur_id")
 	private Stagiaire createur;
@@ -52,28 +52,32 @@ public abstract class BaseEntity {
 		this.createur = authenticatedStagiaire;
 		this.dernier_modificateur = authenticatedStagiaire;
 	}
-	
+
 	@PreUpdate
-    public void preUpdate() {
+	public void preUpdate() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		Stagiaire authenticatedStagiaire = (Stagiaire) authentication.getPrincipal();
 		this.dernier_modificateur = authenticatedStagiaire;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public String getStatus() {
-		return status;
+	public String getEtat() {
+		return etat;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setEtat(String etat) {
+		if (etat == "actif" || etat == "desactive") {
+			this.etat = etat;
+		} else {
+			throw new IllegalArgumentException("Valeur de statut invalide. Le statut doit être soit 'actif' ou 'desactive'");
+		}
 	}
 
 	public Stagiaire getCreateur() {
@@ -107,5 +111,5 @@ public abstract class BaseEntity {
 	public void setModifie_le(Date modifie_le) {
 		this.modifie_le = modifie_le;
 	}
-	
+
 }
