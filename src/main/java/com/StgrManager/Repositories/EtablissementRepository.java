@@ -13,4 +13,5 @@ public interface EtablissementRepository extends JpaRepository<Etablissement, Lo
 	List<Etablissement> findAllActif();
 	
 	Boolean existsByLibelle(String libelle);
+
 }

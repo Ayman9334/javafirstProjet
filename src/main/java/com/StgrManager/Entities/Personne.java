@@ -3,13 +3,11 @@ package com.StgrManager.Entities;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @MappedSuperclass
 public abstract class Personne extends BaseEntity {
 
-	@NotNull(message = "Le numero ne peut pas être vide")
 	@Column(nullable = false, unique = true)
 	private Long numero;
 	@NotEmpty(message = "Le nom ne peut pas être vide")

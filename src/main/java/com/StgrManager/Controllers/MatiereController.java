@@ -37,17 +37,17 @@ public class MatiereController {
 		return matiereService.creeMatiere(matiere);
 	}
 
-	@PutMapping(path = "/{matiereId}")
+	@PutMapping("/{matiereId}")
 	public ResponseEntity<Void> updateMatiere(@Valid @RequestBody Matiere matiere, @PathVariable Long matiereId) {
 		return matiereService.updateMatiere(matiere, matiereId);
 	}
 	
-	@PutMapping(path = "/desactiver/{matiereId}")
+	@GetMapping("/desactiver/{matiereId}")
 	public ResponseEntity<Void> desactiverMatiere(@PathVariable Long matiereId){
 		return matiereService.desactiverMatiere(matiereId);
 	}
 	
-	@DeleteMapping(path = "/{matiereId}")
+	@DeleteMapping("/{matiereId}")
 	public ResponseEntity<Void> suprimerMatiere(@PathVariable Long matiereId) {
 		return matiereService.suprimerMatiere(matiereId);
 	}

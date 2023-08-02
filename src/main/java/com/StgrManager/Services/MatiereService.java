@@ -25,9 +25,10 @@ public class MatiereService {
 	public ResponseEntity<Void> creeMatiere(Matiere matiere) {
 		Long GrandNumero = matiereRepository.getGrandNumero();
 		if (GrandNumero == null) {
-			GrandNumero = 1L;
+			matiere.setNumero(1L);
+		}else {
+			matiere.setNumero(GrandNumero + 1);
 		}
-		matiere.setNumero(GrandNumero + 1);
 		matiereRepository.save(matiere);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}

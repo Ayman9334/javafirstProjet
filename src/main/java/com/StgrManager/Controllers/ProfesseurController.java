@@ -4,11 +4,12 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,14 +25,30 @@ public class ProfesseurController {
 	public ProfesseurController(ProfesseurService professeurService) {
 		this.professeurService = professeurService;
 	}
-	
+
 	@GetMapping
 	public List<Professeur> getProfesseur(){
 		return professeurService.getProfesseur();
 	}
-	@PostMapping(path = "/{matiereId}")
-	public ResponseEntity<Void> creeProfesseur(@Valid @RequestBody Professeur professeur, @PathVariable Long matiereId){
-		professeurService.creeProfesseur(professeur,matiereId);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+	
+	@PostMapping
+	public ResponseEntity<String> creeProfesseur(@Valid @RequestBody Professeur professeur){
+		return professeurService.creeProfesseur(professeur);
 	}
+	
+	@PutMapping("/{professeurId}")
+	public ResponseEntity<String> updateProfesseur(@Valid @RequestBody Professeur professeur, @PathVariable Long professeurId){
+		return professeurService.updateProfesseur(professeur,professeurId);
+	}
+	
+	@GetMapping("/desactiver/{professeurId}")
+	public ResponseEntity<String> desactiverProfesseur(@PathVariable Long professeurId){
+		return professeurService.desactiverProfesseur(professeurId);
+	}
+	
+	@DeleteMapping("/{professeurId}")
+	public ResponseEntity<Void> suprimerProfesseur(@PathVariable Long professeurId){
+		return professeurService.suprimerProfesseur(professeurId);
+	}
+	
 }
