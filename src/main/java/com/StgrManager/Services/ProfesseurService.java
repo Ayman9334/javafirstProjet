@@ -32,7 +32,7 @@ public class ProfesseurService {
 
 		if (professeurRepository.existsByNomAndPrenom(professeur.getNom(), professeur.getPrenom())) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body("il y a déjà un professeur avec ce nom et ce prénom");
+					.body("Il y a déjà un professeur avec ce nom et ce prénom");
 		}
 
 		Long numero = professeurRepository.getGrandNumero();
@@ -62,7 +62,7 @@ public class ProfesseurService {
 			
 			if (professeurRepository.existsByNomAndPrenom(professeur.getNom(), professeur.getPrenom())) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-						.body("il y a déjà un professeur avec ce nom et ce prénom");
+						.body("Il y a déjà un professeur avec ce nom et ce prénom");
 			}
 		}
 
@@ -75,7 +75,7 @@ public class ProfesseurService {
 	public ResponseEntity<String> desactiverProfesseur(Long professeurId) {
 
 		Professeur professeur = professeurRepository.findById(professeurId)
-				.orElseThrow(() -> new IllegalArgumentException("il n'y a aucun article associé à cet identifiant"));
+				.orElseThrow(() -> new IllegalArgumentException("Il n'y a aucun article associé à cet identifiant"));
 
 		professeur.setEtat("desactive");
 		professeurRepository.save(professeur);
@@ -84,7 +84,7 @@ public class ProfesseurService {
 
 	public ResponseEntity<Void> suprimerProfesseur(Long professeurId) {
 		professeurRepository.findById(professeurId)
-				.orElseThrow(() -> new IllegalArgumentException("il n'y a aucun article associé à cet identifiant"));
+				.orElseThrow(() -> new IllegalArgumentException("Il n'y a aucun article associé à cet identifiant"));
 		
 		professeurRepository.deleteById(professeurId);
 		return ResponseEntity.ok().build();

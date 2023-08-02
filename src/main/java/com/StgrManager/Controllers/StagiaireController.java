@@ -1,10 +1,11 @@
 package com.StgrManager.Controllers;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,9 +31,24 @@ public class StagiaireController {
 		return stagiaireService.getAllStagiaire();
 	}
 	
-	@PostMapping("/{etablissementId}")
-	public ResponseEntity<Void> creeStagiaire(@Valid @RequestBody Stagiaire stagiaire ,@PathVariable Long etablissementId){
-		stagiaireService.creeStagiaire(stagiaire,etablissementId);
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+	@PostMapping
+	public ResponseEntity<String> creeStagiaire(@Valid @RequestBody Stagiaire stagiaire){
+		return stagiaireService.creeStagiaire(stagiaire);
 	}
+	
+	@PutMapping("/{stagiaireId}")
+	public ResponseEntity<String> updateStagiaire(@Valid @RequestBody Stagiaire stagiaire, @PathVariable Long stagiaireId){
+		return stagiaireService.updateStagiaire(stagiaire, stagiaireId);
+	}
+
+	@GetMapping("/desactiver/{stagiaireId}")
+	public ResponseEntity<Void> desactiverStagiaire(@PathVariable Long stagiaireId){
+		return stagiaireService.desactiverStagiaire(stagiaireId);
+	}
+	
+	@DeleteMapping("/{stagiaireId}")
+	public ResponseEntity<Void> suprimerStagiaire(@PathVariable Long stagiaireId){
+		return stagiaireService.suprimerStagiaire(stagiaireId);
+	}
+	
 }

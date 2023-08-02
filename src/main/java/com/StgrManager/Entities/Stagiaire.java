@@ -43,10 +43,14 @@ public class Stagiaire extends Personne implements UserDetails {
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "stagiaire_prof", joinColumns = @JoinColumn(name = "stagiaire_id"), inverseJoinColumns = @JoinColumn(name = "professeur_id"))
 	private Set<Professeur> liste_des_professeurs;
+	
 	@ManyToOne
 	@JoinColumn(name = "etablissement_id")
 	private Etablissement etablissement;
 
+	@Transient
+	private Long etablissementId;
+	
 	@NotEmpty(message = "Ce champ ne peut pas être vide")
 	@Column(nullable = false)
 	private String login;
@@ -55,19 +59,19 @@ public class Stagiaire extends Personne implements UserDetails {
 	@NotEmpty(message = "Ce champ ne peut pas être vide")
 	@Column(nullable = false)
 	private String mot_de_passe;
-
+	
 	public Stagiaire() {
 	}
 
-	public Stagiaire(Long numero, String nom, String prenom, String adresse,
-			LocalDate date_de_naissance, String login, String mot_de_passe) {
-		this.setNumero(numero);
+	public Stagiaire(String nom, String prenom, String adresse,
+			LocalDate date_de_naissance, String login, String mot_de_passe, Long etablissementId) {
 		this.setNom(nom);
 		this.setPrenom(prenom);
 		this.setAdresse(adresse);
 		this.date_de_naissance = date_de_naissance;
 		this.login = login;
 		this.mot_de_passe = mot_de_passe;
+		this.setEtablissementId(etablissementId);
 	}
 
 	public LocalDate getDate_de_naissance() {
@@ -98,6 +102,14 @@ public class Stagiaire extends Personne implements UserDetails {
 		this.liste_des_professeurs = liste_des_professeurs;
 	}
 
+	public Long getEtablissementId() {
+		return etablissementId;
+	}
+
+	public void setEtablissementId(Long etablissementId) {
+		this.etablissementId = etablissementId;
+	}
+
 	public String getLogin() {
 		return login;
 	}
@@ -114,6 +126,15 @@ public class Stagiaire extends Personne implements UserDetails {
 		this.mot_de_passe = mot_de_passe;
 	}
 
+	public void update(Stagiaire stagiaire) {
+		this.setNom(stagiaire.getNom());
+		this.setPrenom(stagiaire.getPrenom());
+		this.setAdresse(stagiaire.getAdresse());
+		this.date_de_naissance = stagiaire.getDate_de_naissance();
+		this.login = stagiaire.getLogin();
+		this.mot_de_passe = stagiaire.getMot_de_passe();
+	}
+	
 	// userDetails methods
 
 	@Override

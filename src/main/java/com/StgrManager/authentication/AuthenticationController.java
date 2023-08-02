@@ -35,7 +35,7 @@ public class AuthenticationController {
 		if(user != null) {
 			return ResponseEntity.ok(jsJwtUtil.generateToken(user));
 		}
-		return ResponseEntity.status(400).body("Some error accurred");
+		return ResponseEntity.status(400).body("email ou mot de pass invalide");
 	}
 
 }
