@@ -38,17 +38,17 @@ public class EtablissementController {
 		return etablissementService.creeEtablissement(etablissement);
 	}
 
-	@PutMapping(path = "/{etablissementId}")
+	@PutMapping("/{etablissementId}")
 	public ResponseEntity<Map<String, String>> updateEtablissement(@Valid @RequestBody Etablissement etablissement, @PathVariable Long etablissementId) {
 		return etablissementService.updateEtablissement(etablissement, etablissementId);
 	}
 	
-	@PutMapping(path = "/desactiver/{etablissementId}") 
+	@PutMapping("/desactiver/{etablissementId}") 
 	public ResponseEntity<Void> desactiverEtablissement(@PathVariable Long etablissementId){
 		return etablissementService.desactiverEtablissement(etablissementId);
 	}
 	
-	@DeleteMapping(path = "/{etablissementId}")
+	@DeleteMapping("/{etablissementId}")
 	public ResponseEntity<Void> suprimerEtablissement(@PathVariable Long etablissementId) {
 		return etablissementService.suprimerEtablissement(etablissementId);
 	}

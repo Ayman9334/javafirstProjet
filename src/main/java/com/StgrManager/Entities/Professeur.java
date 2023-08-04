@@ -1,5 +1,8 @@
 package com.StgrManager.Entities;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -11,15 +14,24 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name = "professeurs", uniqueConstraints = @UniqueConstraint(columnNames = { "nom", "prenom" }))
 public class Professeur extends Personne {
 
 	@ManyToOne
 	@JoinColumn(name = "matiere_id", nullable = false)
+	@JsonIgnore
 	private Matiere matiere;
 	@ManyToMany(mappedBy = "liste_des_professeurs", cascade = CascadeType.ALL)
+	@JsonIgnore
 	private Set<Stagiaire> liste_des_eleves;
+	@Transient
+	private Map<String, Object> matiereInfo;
+	@Transient
+	private Set<Map<String, Object>> liste_des_elevesInfo;
 	@Transient
 	private Long matiereId;
 	@Transient
@@ -52,6 +64,28 @@ public class Professeur extends Personne {
 		this.liste_des_eleves = liste_des_eleves;
 	}
 
+	public Map<String, Object> getMatiereInfo() {
+		matiereInfo = new HashMap<>();
+		matiereInfo.put("id", matiere.getId());
+		matiereInfo.put("libelle", matiere.getLibelle());
+		return matiereInfo;
+	}
+
+	public Set<Map<String, Object>> getListe_des_elevesInfo() {
+		liste_des_elevesInfo = new HashSet<>();
+		if (liste_des_eleves != null) {
+			for (Stagiaire stagiaire : liste_des_eleves) {
+				Map<String, Object> eleve = new HashMap<>();
+				eleve.put("id", stagiaire.getId());
+				eleve.put("nom", stagiaire.getNom());
+				eleve.put("prenom", stagiaire.getPrenom());
+				liste_des_elevesInfo.add(eleve);
+			}
+		}
+		return liste_des_elevesInfo;
+	}
+
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY) 
 	public Long getMatiereId() {
 		return matiereId;
 	}
@@ -60,6 +94,7 @@ public class Professeur extends Personne {
 		this.matiereId = matiereId;
 	}
 
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY) 
 	public Set<Long> getStagiaires_ids() {
 		return stagiaires_ids;
 	}
@@ -73,5 +108,5 @@ public class Professeur extends Personne {
 		this.setPrenom(professeur.getPrenom());
 		this.setAdresse(professeur.getAdresse());
 	}
-	
+
 }

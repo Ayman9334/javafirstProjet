@@ -1,6 +1,8 @@
 package com.StgrManager.Services;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,18 +10,23 @@ import org.springframework.stereotype.Service;
 
 import com.StgrManager.Entities.Matiere;
 import com.StgrManager.Entities.Professeur;
+import com.StgrManager.Entities.Stagiaire;
 import com.StgrManager.Repositories.MatiereRepository;
 import com.StgrManager.Repositories.ProfesseurRepository;
+import com.StgrManager.Repositories.StagiaireRepository;
 
 @Service
 public class ProfesseurService {
 
 	private final ProfesseurRepository professeurRepository;
 	private final MatiereRepository matiereRepository;
+	private final StagiaireRepository stagiaireRepository;
 
-	public ProfesseurService(ProfesseurRepository professeurRepository, MatiereRepository matiereRepository) {
+	public ProfesseurService(ProfesseurRepository professeurRepository, MatiereRepository matiereRepository,
+			StagiaireRepository stagiaireRepository) {
 		this.professeurRepository = professeurRepository;
 		this.matiereRepository = matiereRepository;
+		this.stagiaireRepository = stagiaireRepository;
 	}
 
 	public List<Professeur> getProfesseur() {
@@ -27,12 +34,8 @@ public class ProfesseurService {
 	}
 
 	public ResponseEntity<String> creeProfesseur(Professeur professeur) {
-		Matiere matiere = matiereRepository.findById(professeur.getMatiereId())
-				.orElseThrow(() -> new IllegalArgumentException("Identifiant du matiere invalide"));
-
 		if (professeurRepository.existsByNomAndPrenom(professeur.getNom(), professeur.getPrenom())) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body("Il y a déjà un professeur avec ce nom et ce prénom");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Il y a déjà un professeur avec ce nom et ce prénom");
 		}
 
 		Long numero = professeurRepository.getGrandNumero();
@@ -42,8 +45,18 @@ public class ProfesseurService {
 			professeur.setNumero(numero + 1);
 		}
 
+		Matiere matiere = matiereRepository.findById(professeur.getMatiereId()).orElseThrow(() -> new IllegalArgumentException("Identifiant du matiere invalide"));
 		professeur.setMatiere(matiere);
+
+		Set<Stagiaire> listDesEleves = new HashSet<Stagiaire>();
+		for (Long stagiaireId : professeur.getStagiaires_ids()) {
+			Stagiaire stagiaire = stagiaireRepository.findById(stagiaireId).orElseThrow(() -> new IllegalArgumentException("Il n'y a aucun stagiaire avec cet identifiant : " + stagiaireId));
+			stagiaire.getListe_des_professeurs().add(professeur);
+			listDesEleves.add(stagiaire);
+		}
+		
 		professeurRepository.save(professeur);
+		stagiaireRepository.saveAll(listDesEleves);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
@@ -59,15 +72,27 @@ public class ProfesseurService {
 
 		if (!professeurAncient.getNom().equals(professeur.getNom())
 				|| !professeurAncient.getPrenom().equals(professeur.getPrenom())) {
-			
+
 			if (professeurRepository.existsByNomAndPrenom(professeur.getNom(), professeur.getPrenom())) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 						.body("Il y a déjà un professeur avec ce nom et ce prénom");
 			}
 		}
 
+		for(Stagiaire eleve : professeurAncient.getListe_des_eleves()) {
+			eleve.getListe_des_professeurs().remove(professeurAncient);
+		}
+		Set<Stagiaire> listDesEleves = new HashSet<Stagiaire>();
+		for (Long stagiaireId : professeur.getStagiaires_ids()) {
+			Stagiaire stagiaire = stagiaireRepository.findById(stagiaireId).orElseThrow(() -> new IllegalArgumentException("Il n'y a aucun stagiaire avec cet identifiant : " + stagiaireId));
+			stagiaire.getListe_des_professeurs().add(professeurAncient);
+			listDesEleves.add(stagiaire);
+		}
+		
 		professeurAncient.update(professeur);
+		
 		professeurRepository.save(professeurAncient);
+			stagiaireRepository.saveAll(listDesEleves);
 
 		return ResponseEntity.ok().build();
 	}
@@ -85,7 +110,7 @@ public class ProfesseurService {
 	public ResponseEntity<Void> suprimerProfesseur(Long professeurId) {
 		professeurRepository.findById(professeurId)
 				.orElseThrow(() -> new IllegalArgumentException("Il n'y a aucun article associé à cet identifiant"));
-		
+
 		professeurRepository.deleteById(professeurId);
 		return ResponseEntity.ok().build();
 	}

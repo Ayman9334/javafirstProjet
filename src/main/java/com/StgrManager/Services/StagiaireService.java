@@ -1,14 +1,18 @@
 package com.StgrManager.Services;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.StgrManager.Entities.Etablissement;
+import com.StgrManager.Entities.Professeur;
 import com.StgrManager.Entities.Stagiaire;
 import com.StgrManager.Repositories.EtablissementRepository;
+import com.StgrManager.Repositories.ProfesseurRepository;
 import com.StgrManager.Repositories.StagiaireRepository;
 
 @Service
@@ -16,10 +20,13 @@ public class StagiaireService {
 
 	private final StagiaireRepository stagiaireRepository;
 	private final EtablissementRepository etablissementRepository;
+	private final ProfesseurRepository professeurRepository;
 
-	public StagiaireService(StagiaireRepository stagiaireRepository, EtablissementRepository etablissementRepository) {
+	public StagiaireService(StagiaireRepository stagiaireRepository, EtablissementRepository etablissementRepository,
+			ProfesseurRepository professeurRepository) {
 		this.stagiaireRepository = stagiaireRepository;
 		this.etablissementRepository = etablissementRepository;
+		this.professeurRepository = professeurRepository;
 	}
 
 	public List<Stagiaire> getAllStagiaire() {
@@ -47,11 +54,18 @@ public class StagiaireService {
 		} else {
 			stagiaire.setNumero(numero + 1);
 		}
-
+		
 		Etablissement etablissement = etablissementRepository.findById(stagiaire.getEtablissementId())
 				.orElseThrow(() -> new IllegalArgumentException("Identifiant d'etablissement invalide"));
-
 		stagiaire.setEtablissement(etablissement);
+
+		Set<Professeur> professeurs = new HashSet<>();
+		for (Long profId : stagiaire.getProfesseursIds()) {
+			Professeur professeur = professeurRepository.findById(profId).orElseThrow(()-> new IllegalArgumentException("Il n'y a aucun professeur avec cet identifiant : " + profId));
+			professeurs.add(professeur);
+		}
+		stagiaire.setListe_des_professeurs(professeurs);
+		
 		stagiaireRepository.save(stagiaire);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
@@ -85,6 +99,13 @@ public class StagiaireService {
 			stagiaireAncient.setEtablissement(etablissement);
 		}
 
+		Set<Professeur> professeurs = new HashSet<>();
+		for (Long profId : stagiaire.getProfesseursIds()) {
+			Professeur professeur = professeurRepository.findById(profId).orElseThrow(()-> new IllegalArgumentException("Il n'y a aucun professeur avec cet identifiant : " + profId));
+			professeurs.add(professeur);
+		}
+		stagiaireAncient.setListe_des_professeurs(professeurs);
+		
 		stagiaireAncient.update(stagiaire);
 		stagiaireRepository.save(stagiaireAncient);
 		return ResponseEntity.ok().build();
@@ -93,18 +114,18 @@ public class StagiaireService {
 	public ResponseEntity<Void> desactiverStagiaire(Long stagiaireId) {
 		Stagiaire stagiaire = stagiaireRepository.findById(stagiaireId)
 				.orElseThrow(() -> new IllegalArgumentException("Identifiant d'etablissement invalide"));
-		
+
 		stagiaire.setEtat("desactive");
 		stagiaireRepository.save(stagiaire);
 		return ResponseEntity.ok().build();
 	}
-	
+
 	public ResponseEntity<Void> suprimerStagiaire(Long stagiaireId) {
 		stagiaireRepository.findById(stagiaireId)
 				.orElseThrow(() -> new IllegalArgumentException("Identifiant d'etablissement invalide"));
-		
+
 		stagiaireRepository.deleteById(stagiaireId);
 		return ResponseEntity.ok().build();
 	}
-	
+
 }

@@ -3,6 +3,9 @@ package com.StgrManager.Entities;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -24,6 +27,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "stagiaires", uniqueConstraints = @UniqueConstraint(columnNames = { "nom",
@@ -42,15 +47,26 @@ public class Stagiaire extends Personne implements UserDetails {
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "stagiaire_prof", joinColumns = @JoinColumn(name = "stagiaire_id"), inverseJoinColumns = @JoinColumn(name = "professeur_id"))
+	@JsonIgnore
 	private Set<Professeur> liste_des_professeurs;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "etablissement_id")
+	@JsonIgnore
 	private Etablissement etablissement;
 
 	@Transient
+	private Map<String, Object> etablissementInfo;
+
+	@Transient
+	private Set<Map<String, Object>> liste_des_professeursInfo;
+
+	@Transient
 	private Long etablissementId;
-	
+
+	@Transient
+	private Set<Long> professeursIds;
+
 	@NotEmpty(message = "Ce champ ne peut pas être vide")
 	@Column(nullable = false)
 	private String login;
@@ -59,19 +75,21 @@ public class Stagiaire extends Personne implements UserDetails {
 	@NotEmpty(message = "Ce champ ne peut pas être vide")
 	@Column(nullable = false)
 	private String mot_de_passe;
-	
+
 	public Stagiaire() {
 	}
 
 	public Stagiaire(String nom, String prenom, String adresse,
-			LocalDate date_de_naissance, String login, String mot_de_passe, Long etablissementId) {
+			LocalDate date_de_naissance, String login, String mot_de_passe,
+			Long etablissementId, Set<Long> professeursIds) {
 		this.setNom(nom);
 		this.setPrenom(prenom);
 		this.setAdresse(adresse);
 		this.date_de_naissance = date_de_naissance;
 		this.login = login;
 		this.mot_de_passe = mot_de_passe;
-		this.setEtablissementId(etablissementId);
+		this.etablissementId = etablissementId;
+		this.professeursIds = professeursIds;
 	}
 
 	public LocalDate getDate_de_naissance() {
@@ -102,12 +120,43 @@ public class Stagiaire extends Personne implements UserDetails {
 		this.liste_des_professeurs = liste_des_professeurs;
 	}
 
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY) 
 	public Long getEtablissementId() {
 		return etablissementId;
 	}
-
+	
 	public void setEtablissementId(Long etablissementId) {
 		this.etablissementId = etablissementId;
+	}
+
+	public Map<String, Object> getEtablissementInfo() {
+		etablissementInfo = new HashMap<>();
+		etablissementInfo.put("id", etablissement.getId());
+		etablissementInfo.put("libelle", etablissement.getLibelle());
+		return etablissementInfo;
+	}
+
+	public Set<Map<String, Object>> getListe_des_professeursInfo() {
+		liste_des_professeursInfo = new HashSet<>();
+		if (liste_des_professeurs != null) {
+			for (Professeur prof : liste_des_professeurs) {
+				Map<String, Object> profInfo = new HashMap<>();
+				profInfo.put("id", prof.getId());
+				profInfo.put("nom", prof.getNom());
+				profInfo.put("prenom", prof.getPrenom());
+				liste_des_professeursInfo.add(profInfo);
+			}
+		}
+		return liste_des_professeursInfo;
+	}
+
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY) 
+	public Set<Long> getProfesseursIds() {
+		return professeursIds;
+	}
+
+	public void setProfesseursIds(Set<Long> professeursIds) {
+		this.professeursIds = professeursIds;
 	}
 
 	public String getLogin() {
@@ -134,7 +183,7 @@ public class Stagiaire extends Personne implements UserDetails {
 		this.login = stagiaire.getLogin();
 		this.mot_de_passe = stagiaire.getMot_de_passe();
 	}
-	
+
 	// userDetails methods
 
 	@Override

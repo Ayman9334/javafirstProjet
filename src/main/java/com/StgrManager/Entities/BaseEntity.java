@@ -19,6 +19,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @MappedSuperclass
 public abstract class BaseEntity {
 	@Id
@@ -26,23 +28,28 @@ public abstract class BaseEntity {
 	private Long id;
 
 	@Column(nullable = false)
+	@JsonIgnore
 	private String etat = "actif";
 
 	@ManyToOne
 	@JoinColumn(name = "createur_id")
+	@JsonIgnore
 	private Stagiaire createur;
 
 	@ManyToOne
 	@JoinColumn(name = "dernier_modificateur_id")
+	@JsonIgnore
 	private Stagiaire dernier_modificateur;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(updatable = false)
 	@CreationTimestamp
+	@JsonIgnore
 	private Date cree_le;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@UpdateTimestamp
+	@JsonIgnore
 	private Date modifie_le;
 
 	@PrePersist

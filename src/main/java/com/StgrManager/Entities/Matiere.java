@@ -1,5 +1,8 @@
 package com.StgrManager.Entities;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -7,8 +10,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "matieres")
@@ -23,8 +29,12 @@ public class Matiere extends BaseEntity {
 	private String libelle;
 	
 	@OneToMany(mappedBy = "matiere", cascade = CascadeType.ALL)
+	@JsonIgnore
 	private Set<Professeur> liste_des_profs;
 
+	@Transient
+	private Set<Map<String, Object>> liste_des_profsInfo;
+	
 	public Matiere() {
 	}
 
@@ -50,6 +60,20 @@ public class Matiere extends BaseEntity {
 
 	public Set<Professeur> getListe_des_profs() {
 		return liste_des_profs;
+	}
+
+	public Set<Map<String, Object>> getListe_des_profsInfo() {
+		liste_des_profsInfo = new HashSet<>();
+		if (liste_des_profs != null) {
+			for (Professeur prof : liste_des_profs) {
+				Map<String,Object> profInfo = new HashMap<>();
+				profInfo.put("id", prof.getId());
+				profInfo.put("nom", prof.getNom());
+				profInfo.put("prenom", prof.getPrenom());
+				liste_des_profsInfo.add(profInfo);
+			}
+		}
+		return liste_des_profsInfo;
 	}
 
 }
