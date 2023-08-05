@@ -29,10 +29,10 @@ public class AuthenticationController {
 
 	@PostMapping("/login")
 	public ResponseEntity<String> authenticate(@RequestBody AuthenticationRequest req) {
-		authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(req.getLogin(), req.getMot_de_passe()));
-		final UserDetails user = stagiaireRepository.findByLogin(req.getLogin());
+		final UserDetails user = stagiaireRepository.findByLoginInfo(req.getLogin(), req.getMot_de_passe());
 		if(user != null) {
+			authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(req.getLogin(), req.getMot_de_passe()));
 			return ResponseEntity.ok(jsJwtUtil.generateToken(user));
 		}
 		return ResponseEntity.status(400).body("email ou mot de pass invalide");
