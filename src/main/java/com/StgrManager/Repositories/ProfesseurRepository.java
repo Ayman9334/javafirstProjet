@@ -11,6 +11,9 @@ public interface ProfesseurRepository extends JpaRepository<Professeur, Long> {
 	@Query("SELECT p FROM Professeur p WHERE p.etat = 'actif'")
 	List<Professeur> findAllActif();
 
+	@Query("SELECT p.id,p.nom,p.prenom FROM Professeur p WHERE p.etat = 'actif'")
+	List<Object[]> getProfInfo();
+	
 	@Query("SELECT MAX(p.numero) FROM Professeur p")
 	Long getGrandNumero();
 

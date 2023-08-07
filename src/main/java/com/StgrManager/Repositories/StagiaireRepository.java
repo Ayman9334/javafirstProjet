@@ -12,6 +12,9 @@ public interface StagiaireRepository extends JpaRepository<Stagiaire, Long>{
 	@Query("SELECT s FROM Stagiaire s WHERE s.etat = 'actif'")
 	List<Stagiaire> findAllActif();
 	
+	@Query("SELECT s.id,CONCAT(s.nom, ' ', s.prenom) FROM Stagiaire s WHERE s.etat = 'actif'")
+	List<Object[]> getStagiaireInfo();
+	
 	@Query("SELECT MAX(s.numero) FROM Stagiaire s")
 	Long getGrandNumero();
 	
@@ -23,5 +26,6 @@ public interface StagiaireRepository extends JpaRepository<Stagiaire, Long>{
 	Stagiaire findByLoginInfo(@Param("login") String login, @Param("motDePasse") String mot_de_passe);
 	
 	Boolean existsByLogin(String login);
+	
 	
 }

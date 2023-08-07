@@ -42,8 +42,8 @@ public class Matiere extends BaseEntity {
 		this.libelle = libelle;
 	}
 
-	public Long getNumero() {
-		return numero;
+	public String getNumero() {
+	    return String.format("%05d", numero);
 	}
 
 	public void setNumero(Long numero) {

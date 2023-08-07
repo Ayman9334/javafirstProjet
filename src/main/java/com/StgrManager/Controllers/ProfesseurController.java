@@ -1,6 +1,8 @@
 package com.StgrManager.Controllers;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -29,6 +31,11 @@ public class ProfesseurController {
 	@GetMapping
 	public List<Professeur> getProfesseur(){
 		return professeurService.getProfesseur();
+	}
+	
+	@GetMapping("/JoinInfo")
+	public Set<Map<String, Object>> getProfesseurInfo(){
+		return professeurService.getProfesseurInfo();
 	}
 	
 	@PostMapping

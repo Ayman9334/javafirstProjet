@@ -43,7 +43,7 @@ public class EtablissementController {
 		return etablissementService.updateEtablissement(etablissement, etablissementId);
 	}
 	
-	@PutMapping("/desactiver/{etablissementId}") 
+	@GetMapping("/desactiver/{etablissementId}") 
 	public ResponseEntity<Void> desactiverEtablissement(@PathVariable Long etablissementId){
 		return etablissementService.desactiverEtablissement(etablissementId);
 	}

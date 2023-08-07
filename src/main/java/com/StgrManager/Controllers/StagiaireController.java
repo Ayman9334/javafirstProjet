@@ -14,6 +14,8 @@ import com.StgrManager.Entities.Stagiaire;
 import com.StgrManager.Services.StagiaireService;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -29,6 +31,11 @@ public class StagiaireController {
 	@GetMapping
 	public List<Stagiaire> getAllStagiaire() {
 		return stagiaireService.getAllStagiaire();
+	}
+	
+	@GetMapping("/JoinInfo")
+	public Set<Map<String, Object>> getStagiaireInfo(){
+		return stagiaireService.getStagiaireInfo();
 	}
 	
 	@PostMapping

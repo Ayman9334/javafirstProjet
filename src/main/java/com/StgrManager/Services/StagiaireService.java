@@ -1,7 +1,9 @@
 package com.StgrManager.Services;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.http.HttpStatus;
@@ -32,6 +34,19 @@ public class StagiaireService {
 	public List<Stagiaire> getAllStagiaire() {
 		return stagiaireRepository.findAllActif();
 	}
+	
+	public Set<Map<String, Object>> getStagiaireInfo() {
+		List<Object[]> stagiairesInfo = stagiaireRepository.getStagiaireInfo();
+		Set<Map<String, Object>> stagiaires = new HashSet<>();
+		for (Object[] stagiaireInfo : stagiairesInfo) {
+			Map<String, Object> stagiaire = new HashMap<String, Object>();
+			stagiaire.put("id", stagiaireInfo[0]);
+			stagiaire.put("nom", stagiaireInfo[1]);
+			stagiaires.add(stagiaire);
+		}
+		
+		return stagiaires;
+	}
 
 	public ResponseEntity<String> creeStagiaire(Stagiaire stagiaire) {
 
@@ -54,18 +69,19 @@ public class StagiaireService {
 		} else {
 			stagiaire.setNumero(numero + 1);
 		}
-		
+
 		Etablissement etablissement = etablissementRepository.findById(stagiaire.getEtablissementId())
 				.orElseThrow(() -> new IllegalArgumentException("Identifiant d'etablissement invalide"));
 		stagiaire.setEtablissement(etablissement);
 
 		Set<Professeur> professeurs = new HashSet<>();
 		for (Long profId : stagiaire.getProfesseursIds()) {
-			Professeur professeur = professeurRepository.findById(profId).orElseThrow(()-> new IllegalArgumentException("Il n'y a aucun professeur avec cet identifiant : " + profId));
+			Professeur professeur = professeurRepository.findById(profId).orElseThrow(
+					() -> new IllegalArgumentException("Il n'y a aucun professeur avec cet identifiant : " + profId));
 			professeurs.add(professeur);
 		}
 		stagiaire.setListe_des_professeurs(professeurs);
-		
+
 		stagiaireRepository.save(stagiaire);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
@@ -101,11 +117,12 @@ public class StagiaireService {
 
 		Set<Professeur> professeurs = new HashSet<>();
 		for (Long profId : stagiaire.getProfesseursIds()) {
-			Professeur professeur = professeurRepository.findById(profId).orElseThrow(()-> new IllegalArgumentException("Il n'y a aucun professeur avec cet identifiant : " + profId));
+			Professeur professeur = professeurRepository.findById(profId).orElseThrow(
+					() -> new IllegalArgumentException("Il n'y a aucun professeur avec cet identifiant : " + profId));
 			professeurs.add(professeur);
 		}
 		stagiaireAncient.setListe_des_professeurs(professeurs);
-		
+
 		stagiaireAncient.update(stagiaire);
 		stagiaireRepository.save(stagiaireAncient);
 		return ResponseEntity.ok().build();

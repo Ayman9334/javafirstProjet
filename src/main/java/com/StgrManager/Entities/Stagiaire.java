@@ -26,7 +26,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -37,9 +36,8 @@ public class Stagiaire extends Personne implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
-	@NotNull(message = "Ce champ ne peut pas être vide")
+	@NotNull(message = "La date de naissanse ne peut pas être vide")
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate date_de_naissance;
 
 	@Transient
@@ -67,12 +65,12 @@ public class Stagiaire extends Personne implements UserDetails {
 	@Transient
 	private Set<Long> professeursIds;
 
-	@NotEmpty(message = "Ce champ ne peut pas être vide")
+	@NotEmpty(message = "Le login ne peut pas être vide")
 	@Column(nullable = false)
 	private String login;
 
-	@Size(max = 20, message = "Ce champ ne peut pas dépasser 20 caractères")
-	@NotEmpty(message = "Ce champ ne peut pas être vide")
+	@Size(max = 20, message = "Le mot de passe ne peut pas dépasser 20 caractères")
+	@NotEmpty(message = "Le mot de passe ne peut pas être vide")
 	@Column(nullable = false)
 	private String mot_de_passe;
 

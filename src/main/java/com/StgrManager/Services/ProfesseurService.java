@@ -1,7 +1,9 @@
 package com.StgrManager.Services;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.http.HttpStatus;
@@ -31,6 +33,19 @@ public class ProfesseurService {
 
 	public List<Professeur> getProfesseur() {
 		return professeurRepository.findAllActif();
+	}
+
+	public Set<Map<String, Object>> getProfesseurInfo() {
+		List<Object[]> professeurInfo = professeurRepository.getProfInfo();
+		Set<Map<String, Object>> professeurs = new HashSet<>();
+		for (Object[] professeur: professeurInfo) {
+			Map<String, Object> professeurInf = new HashMap<String, Object>();
+			professeurInf.put("id",professeur[0]);
+			professeurInf.put("nom",(String)professeur[1] + " " + professeur[2]);
+			professeurs.add(professeurInf);
+		}
+		
+		return professeurs;
 	}
 
 	public ResponseEntity<String> creeProfesseur(Professeur professeur) {

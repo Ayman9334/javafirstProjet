@@ -19,8 +19,8 @@ public abstract class Personne extends BaseEntity {
 	@Size(max = 255, message = "L'adresse doit être inférieure à 255 caractères")
 	private String adresse;
 
-	public Long getNumero() {
-		return numero;
+	public String getNumero() {
+		return String.format("%05d", numero);
 	}
 
 	public void setNumero(Long numero) {
